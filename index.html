@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>RepertórioFlix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="jpg" href="logo.jpg" />
+    <meta name="theme-color" content="#000" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --vermelho: #e50914;
+        --cinza: #777;
+        --fundo: #111;
+        --card: #1c1c1c;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--fundo);
+        color: #fff;
+      }
+      header {
+        background: #000;
+        padding: 20px;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      header h1 {
+        margin: 0;
+      }
+      header a {
+        color: var(--vermelho);
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.9rem;
+      }
+      .search {
+        margin-top: 12px;
+      }
+      .search input {
+        width: 100%;
+        max-width: 420px;
+        padding: 10px 16px;
+        border-radius: 25px;
+        border: none;
+        outline: none;
+        background: #2a2a2a;
+        color: #fff;
+      }
+      .catalogo {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
+        padding: 26px;
+      }
+      .card {
+        background: var(--card);
+        border-radius: 12px;
+        overflow: hidden;
+        transition: 0.3s;
+        position: relative;
+      }
+      .card:hover {
+        transform: scale(1.04);
+      }
+      .card img {
+        width: 100%;
+        height: 340px;
+        object-fit: cover;
+      }
+      .card-content {
+        padding: 15px;
+      }
+      .card h3 {
+        margin: 6px 0;
+      }
+      .card p {
+        font-size: 0.85rem;
+        color: #ccc;
+      }
+      .btn-sinopse,
+      .btn-fav {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 16px;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .btn-sinopse {
+        background: #e50914;
+        margin-right: 8px;
+      }
+      .btn-fav {
+        background: #444;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>RepertórioFlix</h1>
+      <a href="favoritos.html">Ver Favoritos</a> |
+      <a href="repertorios.html">Ver repertórios</a>
+      <div class="search">
+        <input id="busca" type="text" placeholder="Pesquisar..." />
+      </div>
+    </header>
+
+    <main class="catalogo" id="catalogo"></main>
+
+    <script>
+      const repertorios = [
+        {
+          titulo: "Parasita",
+          tipo: "Filme",
+          img: "parasita.jpg",
+          resumo: "Desigualdade social e conflitos de classe.",
+          sinopse:
+            "A família Kim, vivendo na pobreza, consegue infiltrar-se gradualmente na vida da rica família Park, oferecendo serviços domésticos e de tutoria. O filme explora como a desigualdade social cria tensões e provoca conflitos, mostrando que o limiar entre a sobrevivência e a exploração é tênue. Ao longo da história, a relação entre as duas famílias se transforma em uma tragédia, expondo as estruturas de classe e as consequências de um sistema profundamente desigual.",
+        },
+        {
+          titulo: "Cidade de Deus",
+          tipo: "Filme",
+          img: "citygood.jpg",
+          resumo: "Violência e criminalidade em favela do Rio.",
+          sinopse:
+            "Ambientado em uma favela do Rio de Janeiro, o filme acompanha a vida de crianças e adolescentes que crescem cercados por violência, tráfico de drogas e abandono do Estado. A narrativa mostra como o ambiente molda escolhas e destinos, abordando a ascensão de gangues, a perda da inocência e o impacto social da marginalização. O filme é um retrato cru e realista da desigualdade urbana e de como a falta de oportunidades perpetua o ciclo da violência.",
+        },
+        {
+          titulo: "O Show de Truman",
+          tipo: "Filme",
+          img: "truman.jpg",
+          resumo: "Vida de Truman é um reality show sem que ele saiba.",
+          sinopse:
+            "Truman Burbank vive sem saber que toda a sua vida é transmitida em um reality show, desde o nascimento. O filme acompanha sua gradual percepção de que há algo errado, explorando temas de manipulação midiática, controle social e perda da liberdade individual. Ao questionar a realidade que o cerca, Truman representa a luta pela autonomia e pela verdade em um mundo de aparências e ilusões.",
+        },
+        {
+          titulo: "Que Horas Ela Volta?",
+          tipo: "Filme",
+          img: "quehoras.jpg",
+          resumo: "Trabalho doméstico e hierarquia social.",
+          sinopse:
+            "Val, empregada doméstica, questiona relações hierárquicas e desigualdade social ao trazer sua filha para morar com ela na casa da patroa. O filme mostra o contraste entre classes sociais e como pequenas ações podem desafiar estruturas injustas, explorando tensões familiares e sociais.",
+        },
+        {
+          titulo: "Wall-E",
+          tipo: "Filme",
+          img: "wall-e.jpg",
+          resumo: "Consumo e impactos ambientais.",
+          sinopse:
+            "Wall-E, um robô compactador, permanece sozinho cuidando da Terra coberta de lixo até encontrar Eve, um robô enviado para investigar sinais de vida. A história aborda os efeitos do consumismo desenfreado, a negligência ambiental e a responsabilidade humana, despertando reflexões sobre preservação do planeta e sustentabilidade.",
+        },
+        {
+          titulo: "Intocáveis",
+          tipo: "Filme",
+          img: "intocaveis.webp",
+          resumo: "Amizade entre pessoas de classes diferentes.",
+          sinopse:
+            "Philippe, tetraplégico rico, contrata Driss, um cuidador humilde, e juntos desenvolvem uma amizade baseada em confiança e superação. O filme mostra como barreiras sociais podem ser rompidas através de empatia, companheirismo e compreensão, além de explorar o impacto das relações humanas na vida pessoal.",
+        },
+        {
+          titulo: "Clube da Luta",
+          tipo: "Filme",
+          img: "clube.jpg",
+          resumo: "Crítica à sociedade de consumo e identidade.",
+          sinopse:
+            "Um homem insatisfeito com a vida corporativa conhece Tyler Durden e juntos criam o Clube da Luta, uma forma radical de questionar a alienação e o vazio existencial da sociedade moderna. O filme aborda questões de identidade, revolta e consumo desenfreado, mostrando a desconstrução de valores impostos pelo capitalismo.",
+        },
+        {
+          titulo: "V de Vingança",
+          tipo: "Filme",
+          img: "vdeving.webp",
+          resumo: "Luta contra regimes autoritários.",
+          sinopse:
+            "Em um futuro distópico, Evey encontra V, um vigilante mascarado que luta contra a opressão e o autoritarismo. O filme explora resistência política, liberdade individual e os efeitos de regimes totalitários sobre a população, enfatizando a importância da consciência crítica e do questionamento da autoridade.",
+        },
+        {
+          titulo: "A Origem",
+          tipo: "Filme",
+          img: "A origem.avif",
+          resumo: "Sono, subconsciente e realidade.",
+          sinopse:
+            "Dom Cobb é especialista em extrair segredos do subconsciente durante sonhos. Ao tentar implantar uma ideia, enfrenta desafios psicológicos e emocionais, explorando camadas de sonhos, memórias e realidades paralelas.",
+        },
+        {
+          titulo: "Black Mirror",
+          tipo: "Série",
+          img: "blackm.jpg",
+          resumo: "Tecnologia e sociedade.",
+          sinopse:
+            "Série antológica que investiga os impactos da tecnologia sobre a sociedade, abordando vigilância, manipulação, ética e alienação.",
+        },
+        {
+          titulo: "The Handmaid’s Tale",
+          tipo: "Série",
+          img: "handmaid.jpg",
+          resumo: "Autoritarismo e resistência feminina.",
+          sinopse:
+            "Em Gilead, mulheres são privadas de direitos e usadas como reprodutoras. June luta contra opressão e violência, representando resistência individual e busca por liberdade.",
+        },
+        {
+          titulo: "Stranger Things",
+          tipo: "Série",
+          img: "stranger.jpg",
+          resumo: "Amizade e mistério.",
+          sinopse:
+            "Na cidade de Hawkins, o desaparecimento de um garoto revela experimentos secretos e dimensões paralelas. Um grupo de amigos enfrenta perigos enquanto mantém laços de amizade e coragem.",
+        },
+        {
+          titulo: "1984",
+          tipo: "Livro",
+          img: "1984_filme.jpg",
+          resumo: "Totalitarismo e vigilância.",
+          sinopse:
+            "Em um Estado totalitário, o Partido controla pensamentos e ações. Winston Smith tenta preservar a individualidade e resistir à opressão.",
+        },
+        {
+          titulo: "Vidas Secas",
+          tipo: "Livro",
+          img: "vidassecas.jpg",
+          resumo: "Desigualdade e resistência no sertão.",
+          sinopse:
+            "A família de Fabiano enfrenta seca, fome e pobreza extrema no sertão nordestino, lutando diariamente pela sobrevivência e dignidade.",
+        },
+        {
+          titulo: "O Dilema das Redes",
+          tipo: "Documentário",
+          img: "dilema.jpg",
+          resumo: "Redes sociais e comportamento.",
+          sinopse:
+            "Documentário que examina como redes sociais moldam comportamento, opiniões e emoções, destacando manipulação, vícios digitais e polarização social.",
+        },
+        {
+          titulo: "Antes do Dilúvio",
+          tipo: "Documentário",
+          img: "diluvio.jpg",
+          resumo: "Meio ambiente e sustentabilidade.",
+          sinopse:
+            "Documentário que acompanha Leonardo DiCaprio analisando efeitos das mudanças climáticas, poluição e desmatamento, propondo soluções para sustentabilidade e responsabilidade ambiental.",
+        },
+        {
+          titulo: "Carol",
+          tipo: "Filme",
+          img: "Carol.jpg",
+          resumo: "Gênero e questões de identidade.",
+          sinopse:
+            "Conta a história de um romance proibido entre duas mulheres na década de 1950, abordando identidade, discriminação e desafios sociais relacionados à orientação sexual.",
+        },
+        {
+          titulo: "O Pianista",
+          tipo: "Filme",
+          img: "o-pianista.jpg",
+          resumo: "Ética e moralidade em situações extremas.",
+          sinopse:
+            "A história de um pianista judeu sobrevivendo à Segunda Guerra Mundial em Varsóvia, enfrentando escolhas morais e dilemas éticos em meio ao horror do Holocausto.",
+        },
+        {
+          titulo: "Milk – A Voz da Igualdade",
+          tipo: "Filme",
+          img: "milk-igualdade.jpg",
+          resumo: "Política e cidadania.",
+          sinopse:
+            "Baseado na vida de Harvey Milk, primeiro político abertamente gay eleito na Califórnia, mostrando luta por direitos civis, cidadania e igualdade.",
+        },
+        {
+          titulo: "Uma Mente Brilhante",
+          tipo: "Filme",
+          img: "brilhante.jpg",
+          resumo: "Saúde mental e superação.",
+          sinopse:
+            "A vida do matemático John Nash, que enfrenta esquizofrenia enquanto desenvolve uma carreira brilhante, mostrando superação, talento e desafios da mente humana.",
+        },
+        {
+          titulo: "A Lista de Schindler",
+          tipo: "Filme",
+          img: "Schindler.jpg",
+          resumo: "História e memória.",
+          sinopse:
+            "O industrial Oskar Schindler salva mais de mil judeus do Holocausto, mostrando coragem, humanidade e preservação da memória histórica.",
+        },
+        {
+          titulo: "Estrelas Além do Tempo",
+          tipo: "Filme",
+          img: "estrelas.jpg",
+          resumo: "Ciência, tecnologia e inclusão.",
+          sinopse:
+            "Baseado em histórias reais de mulheres negras que trabalharam na NASA, mostrando luta contra discriminação, inteligência e contribuições científicas.",
+        },
+        {
+          titulo: "O Grande Hotel Budapeste",
+          tipo: "Filme",
+          img: "budapeste.jpg",
+          resumo: "Literatura, arte e estética cinematográfica.",
+          sinopse:
+            "A narrativa acompanha aventuras de Gustave H., um gerente de hotel, explorando humor, arte, estética e narrativa cinematográfica refinada.",
+        },
+      ];
+
+      const catalogo = document.getElementById("catalogo");
+      const busca = document.getElementById("busca");
+
+      // Favoritos
+      function adicionarFavorito(titulo) {
+        let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+        if (!favoritos.includes(titulo)) {
+          favoritos.push(titulo);
+          localStorage.setItem("favoritos", JSON.stringify(favoritos));
+          alert(`"${titulo}" adicionado aos favoritos!`);
+        } else {
+          alert(`"${titulo}" já está nos favoritos.`);
+        }
+      }
+
+      // Renderização segura
+      function render() {
+        const termo = busca.value.toLowerCase();
+        catalogo.innerHTML = "";
+        repertorios
+          .filter(
+            (r) =>
+              r.titulo.toLowerCase().includes(termo) ||
+              r.resumo.toLowerCase().includes(termo),
+          )
+          .forEach((r) => {
+            const card = document.createElement("div");
+            card.className = "card";
+
+            const img = document.createElement("img");
+            img.src = r.img;
+            img.alt = r.titulo;
+
+            const content = document.createElement("div");
+            content.className = "card-content";
+
+            const h3 = document.createElement("h3");
+            h3.textContent = r.titulo;
+
+            const p = document.createElement("p");
+            p.textContent = r.resumo;
+
+            const btnSinopse = document.createElement("a");
+            btnSinopse.className = "btn-sinopse";
+            btnSinopse.href = `sinopse.html?titulo=${encodeURIComponent(r.titulo)}`;
+            btnSinopse.target = "_blank";
+            btnSinopse.rel = "noopener noreferrer";
+            btnSinopse.textContent = "Ver sinopse completa";
+
+            const btnFav = document.createElement("button");
+            btnFav.className = "btn-fav";
+            btnFav.innerHTML = '<i class="fa fa-heart"></i> Favorito';
+            btnFav.addEventListener("click", (e) => {
+              e.stopPropagation(); // previne conflito
+              adicionarFavorito(r.titulo);
+            });
+
+            content.appendChild(h3);
+            content.appendChild(p);
+            content.appendChild(btnSinopse);
+            content.appendChild(btnFav);
+
+            card.appendChild(img);
+            card.appendChild(content);
+
+            catalogo.appendChild(card);
+          });
+      }
+
+      busca.addEventListener("input", render);
+      render();
+    </script>
+  </body>
+</html>

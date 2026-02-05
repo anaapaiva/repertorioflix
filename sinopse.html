@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Sinopse</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { background:#111; color:#fff; font-family:Arial,sans-serif; padding:20px; }
+h1 { color:#e50914; }
+p { color:#ccc; }
+</style>
+</head>
+<body>
+<h1 id="titulo"></h1>
+<p id="sinopse"></p>
+
+<script>
+// Pega o parâmetro da URL ?titulo=
+const params = new URLSearchParams(window.location.search);
+const titulo = params.get("titulo");
+
+// Dados de sinopse (pode repetir os mesmos do index)
+const sinopse = [
+  {
+    titulo: "Parasita",
+    sinopse: "A família Kim, vivendo na pobreza extrema em um subsolo apertado, encontra uma oportunidade de melhorar de vida quando o filho consegue dar aulas particulares para a filha da rica família Park. Aos poucos, todos os membros da família Kim se infiltram na vida da família rica, assumindo diferentes funções domésticas. O filme explora de forma magistral a desigualdade social, a luta por sobrevivência, o abismo entre classes e os preconceitos internos, mostrando como pequenas vantagens podem se transformar em consequências trágicas. A obra questiona moralidade, ética e até que ponto alguém está disposto a ir para mudar seu destino."
+  },
+  {
+    titulo: "Cidade de Deus",
+    sinopse: "Ambientado em uma favela do Rio de Janeiro entre as décadas de 1960 e 1980, o filme acompanha a trajetória de crianças e adolescentes que crescem cercados por violência, tráfico de drogas e ausência do Estado. A narrativa apresenta personagens complexos que enfrentam escolhas extremas para sobreviver, incluindo gangues e assaltos. Mostra a ascensão de figuras criminosas, a perda da inocência e a luta para escapar do ciclo de violência. É um retrato brutal, realista e poético da desigualdade urbana e das consequências sociais da marginalização, evidenciando que a pobreza extrema influencia diretamente as decisões humanas."
+  },
+  {
+    titulo: "O Show de Truman",
+    sinopse: "Truman Burbank vive uma vida aparentemente perfeita em uma cidade ideal, mas descobre que toda a sua existência é transmitida 24 horas por dia como um reality show, sem seu consentimento. O filme aborda temas como manipulação midiática, privacidade, liberdade individual e controle social. A jornada de Truman reflete a busca pela autenticidade e pela verdade em um mundo de aparências e ilusões. Ele questiona não apenas a realidade ao seu redor, mas também a natureza da liberdade humana diante de sistemas que monitoram e manipulam constantemente nossas vidas."
+  },
+  {
+    titulo: "Que Horas Ela Volta?",
+    sinopse: "Val, uma empregada doméstica nordestina, trabalha para uma família rica em São Paulo, mantendo regras rígidas e invisíveis de hierarquia. Quando sua filha chega para estudar na cidade, as fronteiras entre empregado e patrão começam a se desfazer. O filme mostra o choque cultural e social, as tensões de classe, preconceitos sutis e a luta por reconhecimento. É uma análise sensível sobre desigualdade, dignidade e relações humanas complexas em um contexto urbano desigual, explorando como a convivência pode desafiar normas sociais estabelecidas."
+  },
+  {
+    titulo: "Wall-E",
+    sinopse: "Em um futuro distante, a Terra está coberta de lixo e abandonada pela humanidade devido ao consumismo desenfreado. Wall-E, um pequeno robô de compactação de lixo, continua a trabalhar sozinho, até que encontra Eve, uma robô enviada para encontrar sinais de vida. A história se torna uma aventura sobre amor, esperança e responsabilidade ambiental. O filme é uma crítica ao consumismo, à negligência ecológica e à alienação tecnológica, mostrando que a consciência ambiental e os pequenos atos podem influenciar mudanças significativas no mundo."
+  },
+  {
+    titulo: "A Origem",
+    sinopse: "Dom Cobb é especialista em extrair segredos do subconsciente durante sonhos. Recebendo a missão de implantar uma ideia na mente de alguém, ele enfrenta desafios psicológicos e emocionais complexos. O filme explora camadas de sonhos, memórias e realidades paralelas, questionando a percepção de tempo e identidade. A narrativa desafia o espectador a refletir sobre consciência, moralidade e a natureza da realidade, enquanto combina ação, suspense e drama psicológico, mostrando o peso das lembranças e das escolhas humanas."
+  },
+  {
+    titulo: "Intocáveis",
+    sinopse: "Philippe, um aristocrata tetraplégico, contrata Driss, um jovem de origem humilde, como cuidador. Apesar das diferenças sociais e culturais, eles constroem uma amizade baseada em confiança, humor e superação. O filme aborda inclusão, empatia, desconstrução de estereótipos e o poder transformador das relações humanas. Mostra como o contato com pessoas de realidades diferentes pode ampliar perspectivas, quebrar preconceitos e trazer alegria e significado para a vida de ambos."
+  },
+  {
+    titulo: "Clube da Luta",
+    sinopse: "Um homem insatisfeito com sua vida e trabalho cria um clube secreto de luta como forma de liberar frustrações e questionar a sociedade de consumo. Ao longo do filme, o protagonista se vê envolvido em um movimento radical que desafia normas sociais, identidade e moralidade. A obra explora alienação, masculinidade, rebelião contra sistemas opressivos e a busca de sentido em uma vida vazia de propósito, oferecendo reflexão intensa sobre o comportamento humano e os limites da sociedade moderna."
+  },
+  {
+    titulo: "Black Mirror",
+    sinopse: "Série antológica que investiga o impacto da tecnologia na sociedade moderna. Cada episódio apresenta um cenário diferente em que avanços tecnológicos, redes sociais e inteligência artificial transformam relações humanas e éticas. Os temas incluem vigilância, alienação, manipulação de informações e dilemas morais. A série provoca reflexão crítica sobre o papel da tecnologia, os limites da privacidade e os riscos do uso indiscriminado da inovação em nossas vidas."
+  },
+  {
+    titulo: "The Handmaid’s Tale",
+    sinopse: "Em Gilead, uma sociedade totalitária, as mulheres são privadas de direitos e obrigadas a servir como reprodutoras. A protagonista June luta para sobreviver e resistir, enfrentando opressão, violência e controle estatal. A série aborda temas de autoritarismo, injustiça de gênero, moralidade e resistência individual. Explora as consequências da repressão extrema, o poder do protesto silencioso e a coragem de manter a dignidade mesmo em contextos extremamente opressivos."
+  },
+  {
+    titulo: "Stranger Things",
+    sinopse: "Na pequena cidade de Hawkins, nos anos 80, o desaparecimento de um garoto desencadeia uma série de eventos envolvendo experimentos secretos do governo, dimensões paralelas e criaturas sobrenaturais. Um grupo de amigos enfrenta desafios extraordinários enquanto mantém laços de amizade e coragem. A série combina suspense, terror, ficção científica e nostalgia, explorando temas de lealdade, confiança, superação e a importância da infância na construção da identidade e na descoberta do mundo."
+  },
+  {
+    titulo: "1984",
+    sinopse: "Em um Estado totalitário, o Partido controla todos os aspectos da vida, vigiando e manipulando pensamentos, palavras e ações. Winston Smith tenta resistir à opressão e preservar sua individualidade. O livro/filme aborda totalitarismo, vigilância extrema, manipulação da informação, perda da liberdade e consequências de regimes autoritários. É um alerta sobre a necessidade de vigilância democrática, reflexão crítica e a luta pela autonomia individual em contextos de poder absoluto."
+  },
+  {
+    titulo: "Vidas Secas",
+    sinopse: "A obra retrata Fabiano, Sinhá Vitória e seus filhos, uma família nordestina enfrentando seca, fome e pobreza extrema. Mostra a luta diária pela sobrevivência em um ambiente hostil, a dureza da vida no sertão e a resistência frente às injustiças sociais. O livro/filme evidencia desigualdade, abandono institucional e resiliência humana, refletindo sobre coragem, dignidade e as dificuldades enfrentadas por populações marginalizadas no Brasil rural."
+  },
+  {
+    titulo: "O Dilema das Redes",
+    sinopse: "O documentário examina como as grandes redes sociais influenciam comportamento, percepções e emoções, utilizando técnicas de manipulação digital, coleta de dados e estratégias de engajamento. Especialistas discutem impactos psicológicos, sociais e políticos, alertando sobre vícios, polarização, fake news e a necessidade de pensamento crítico. A obra provoca reflexão sobre privacidade, responsabilidade digital e a forma como o design da tecnologia pode moldar sociedades inteiras."
+  },
+  {
+    titulo: "Antes do Dilúvio",
+    sinopse: "Leonardo DiCaprio viaja pelo mundo analisando os efeitos das mudanças climáticas e as ações humanas que impactam o planeta. O documentário aborda poluição, desmatamento, aquecimento global, consumo desenfreado e sustentabilidade, propondo soluções e alternativas responsáveis. Incentiva reflexão sobre o papel do indivíduo e das sociedades na preservação ambiental e na responsabilidade com o futuro do planeta, misturando ciência, política e ativismo."
+  },
+  {
+    titulo: "V de Vingança",
+    sinopse: "Em um futuro distópico, Evey encontra V, um vigilante mascarado que luta contra um governo autoritário e opressor que controla a população com medo e propaganda. V busca destruir as estruturas do regime e inspirar os cidadãos a refletirem sobre liberdade, justiça e responsabilidade individual. A história aborda resistência política, coragem, manipulação, vingança e transformação social, destacando a importância de questionar a autoridade e lutar pelos direitos fundamentais."
+  },
+  {    titulo: "Carol",
+    sinopse: "Carol é ambientado na década de 1950, em Nova York, e acompanha a história de Therese, uma jovem vendedora de loja de departamentos, e Carol, uma mulher elegante presa a um casamento infeliz. As duas desenvolvem um romance proibido em uma sociedade marcada por preconceito contra relacionamentos LGBTQIA+. O filme explora os desafios pessoais e sociais enfrentados por mulheres que desejam amar livremente, mostrando as pressões legais, familiares e culturais. A narrativa aprofunda a complexidade emocional das personagens, abordando identidade, escolhas afetivas e a busca por autonomia em meio a normas sociais restritivas."
+  },
+  {
+    titulo: "O Pianista",
+    sinopse: "O Pianista conta a história real de Władysław Szpilman, um pianista judeu em Varsóvia durante a ocupação nazista na Segunda Guerra Mundial. O filme mostra o colapso da vida urbana e a perseguição sistemática de judeus, retratando fome, terror e desespero. Szpilman enfrenta a morte constante, perda de familiares e amigos, e dilemas éticos extremos. Sua sobrevivência depende de criatividade, resiliência e sorte, enquanto observa a destruição de sua cidade e de sua cultura. A narrativa enfatiza a dignidade humana, a coragem individual e a resistência silenciosa diante da opressão."
+  },
+   
+  {
+    titulo: "Milk – A Voz da Igualdade",
+    sinopse: "Baseado na vida do ativista e político Harvey Milk, o filme acompanha sua trajetória desde a chegada à Califórnia até se tornar o primeiro homem abertamente gay eleito para um cargo público na região de São Francisco. Milk enfrenta homofobia, discriminação política e ameaças à sua vida, enquanto mobiliza a comunidade LGBTQIA+ para lutar por direitos civis e cidadania plena. A narrativa mostra sua estratégia política, o impacto de sua liderança e como eventos históricos influenciam a legislação e o ativismo social."
+  },
+   
+  {
+    titulo: "Uma Mente Brilhante",
+    sinopse: "O filme acompanha John Nash, matemático talentoso que desenvolve teorias revolucionárias enquanto lida com esquizofrenia. A narrativa mostra os desafios de viver com uma doença mental, incluindo alucinações e isolamento, e como sua genialidade científica convive com essas dificuldades. Nash luta para manter sua carreira, vida familiar e integridade pessoal. O filme também explora o apoio da esposa, amigos e comunidade acadêmica, mostrando como redes de apoio e perseverança podem transformar a vida de pessoas com transtornos mentais."
+  },
+  {
+    titulo: "A Lista de Schindler",
+    sinopse: "Baseado na história real de Oskar Schindler, um industrial alemão que salvou mais de mil judeus durante o Holocausto ao empregá-los em suas fábricas. O filme retrata a brutalidade do regime nazista, a desumanização dos judeus e as condições terríveis dos campos de concentração. Schindler inicialmente motivado por lucro, gradualmente se torna um herói humanitário, arriscando sua vida para proteger seus trabalhadores. A narrativa destaca coragem, compaixão e a importância da memória histórica diante do genocídio."
+  },
+  {
+    titulo: "O Grande Hotel Budapeste",
+    sinopse: "A história segue Gustave H., um excêntrico gerente de hotel na Europa entre guerras, e seu jovem protegido Zero Moustafa. Juntos, eles enfrentam uma série de aventuras envolvendo roubo de uma pintura renascentista, uma disputa por uma herança familiar e a ascensão do fascismo. O filme é uma celebração da amizade, lealdade e arte, com um estilo visual único que mistura humor, drama e nostalgia. Explora temas de identidade cultural, resistência à opressão e o valor das conexões humanas em tempos turbulentos."
+  },
+  {
+    titulo:"Estrelas Além do Tempo",
+   sinopse:"O filme narra a história real de três mulheres afro-americanas brilhantes que trabalharam na NASA durante a corrida espacial dos anos 1960. Katherine Johnson, Dorothy Vaughan e Mary Jackson enfrentam discriminação racial e de gênero, mas suas habilidades e determinação os permitem contribuir significativamente para o sucesso do programa espacial americano. A narrativa destaca a importância da educação, da persistência e da superação de barreiras sociais em contextos históricos desafiadores."
+  }
+];
+
+
+// Encontra a sinopse do título selecionado
+const filme = sinopse.find(f => f.titulo === titulo);
+
+if(filme){
+  document.getElementById("titulo").textContent = filme.titulo;
+  document.getElementById("sinopse").textContent = filme.sinopse;
+} else {
+  document.getElementById("titulo").textContent = "Filme não encontrado";
+  document.getElementById("sinopse").textContent = "";
+}
+</script>
+
+<a href="index.html" style="
+    display:inline-block;
+    background:#e50914;
+    color:#fff;
+    text-decoration:none;
+    padding:10px 20px;
+    border-radius:12px;
+    font-weight:bold;
+    margin-top:15px;
+">
+← Voltar para Início
+</a>
+
+
+</body>
+</html>

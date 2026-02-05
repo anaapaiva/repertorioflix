@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<title>Favoritos - RepertórioFlix</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="jpg" href="logo.jpg" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<style>
+:root { --vermelho:#e50914; --cinza:#777; --fundo:#111; --card:#1c1c1c; }
+* { box-sizing:border-box; }
+body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--fundo); color:#fff; }
+header { background:#000; padding:20px; text-align:center; position:sticky; top:0; z-index:10; }
+header h1 { margin:0; }
+header a { color:var(--vermelho); text-decoration:none; font-weight:bold; font-size:0.9rem; }
+.catalogo { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:24px; padding:26px; }
+.card { background:var(--card); border-radius:12px; overflow:hidden; transition:0.3s; position:relative; }
+.card:hover { transform:scale(1.04); }
+.card img { width:100%; height:340px; object-fit:cover; }
+.card-content { padding:15px; }
+.card h3 { margin:6px 0; }
+.card p { font-size:0.85rem; color:#ccc; }
+.btn-sinopse, .btn-remove { display:inline-block; margin-top:10px; padding:8px 16px; color:#fff; text-decoration:none; border-radius:20px; font-size:0.85rem; font-weight:bold; cursor:pointer; }
+.btn-sinopse { background:#e50914; margin-right:8px; }
+.btn-remove { background:#444; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Favoritos - RepertórioFlix</h1>
+  <a href="index.html">Voltar ao catálogo</a>
+</header>
+
+<main class="catalogo" id="catalogo"></main>
+
+<script>
+// Lista de todos os filmes (mesmo do repertórios) para pegar imagem e sinopse
+  const repertorios = [
+  {
+    titulo: "Parasita",
+    img: "parasita.jpg",
+    sinopse: "A família Kim, vivendo na pobreza, consegue infiltrar-se gradualmente na vida da rica família Park, oferecendo serviços domésticos e de tutoria. O filme explora como a desigualdade social cria tensões e provoca conflitos, mostrando que o limiar entre a sobrevivência e a exploração é tênue. Ao longo da história, a relação entre as duas famílias se transforma em uma tragédia, expondo as estruturas de classe e as consequências de um sistema profundamente desigual."
+  },
+  {
+    titulo: "Cidade de Deus",
+    img: "citygood.jpg",
+    sinopse: "Ambientado em uma favela do Rio de Janeiro, o filme acompanha a vida de crianças e adolescentes que crescem cercados por violência, tráfico de drogas e abandono do Estado. A narrativa mostra como o ambiente molda escolhas e destinos, abordando a ascensão de gangues, a perda da inocência e o impacto social da marginalização. O filme é um retrato cru e realista da desigualdade urbana e de como a falta de oportunidades perpetua o ciclo da violência."
+  },
+  {
+    titulo: "O Show de Truman",
+    img: "truman.jpg",
+    sinopse: "Truman Burbank vive sem saber que toda a sua vida é transmitida em um reality show desde o nascimento. O filme acompanha sua gradual percepção de que há algo errado, explorando temas de manipulação midiática, controle social e perda da liberdade individual. Ao questionar a realidade que o cerca, Truman representa a luta pela autonomia e pela verdade em um mundo de aparências e ilusões."
+  },
+  {
+    titulo: "Que Horas Ela Volta?",
+    img: "quehoras.jpg",
+    sinopse: "Val, uma empregada doméstica de origem nordestina, trabalha para uma família rica em São Paulo. Ao trazer sua filha para morar com ela, questiona a hierarquia social e a desigualdade presente nas relações de trabalho doméstico. O filme discute limites invisíveis, preconceitos e a luta por reconhecimento, evidenciando tensões entre classe social e vínculos familiares."
+  },
+  {
+    titulo: "Wall-E",
+    img: "wall-e.jpg",
+    sinopse: "No futuro, a Terra está coberta de lixo, resultado do consumismo desenfreado da humanidade. Wall-E, um robô compactador de lixo, permanece sozinho cuidando do planeta. Quando encontra a robô Eve, embarca em uma aventura que revela a importância da preservação ambiental e da responsabilidade humana. A obra mistura crítica social com uma narrativa emocionante sobre cuidado, amor e esperança."
+  },
+  {
+    titulo: "A Origem",
+    img: "A Origem.avif",
+    sinopse: "Dom Cobb é um ladrão especializado em extrair informações de sonhos. Ao receber a missão de implantar uma ideia na mente de alguém (inception), ele enfrenta desafios éticos e emocionais. O filme explora múltiplos níveis de realidade, memória e consciência, questionando o que é real e como nossas percepções podem ser manipuladas, enquanto mistura ação e drama psicológico."
+  },
+  {
+    titulo: "Intocáveis",
+    img: "intocaveis.webp",
+    sinopse: "Philippe, um homem tetraplégico e rico, contrata Driss, um cuidador de origem humilde, para ajudá-lo em sua rotina. Apesar das diferenças sociais, eles constroem uma amizade improvável baseada em confiança, humor e superação. O filme aborda temas como inclusão, empatia e quebra de barreiras sociais, mostrando como relações humanas podem transformar vidas."
+  },
+  {
+    titulo: "Clube da Luta",
+    img: "clube.jpg",
+    sinopse: "Um homem insatisfeito com sua vida e seu trabalho cria um clube secreto de luta como forma de enfrentar frustrações e alienação da sociedade de consumo. A narrativa evolui para uma reflexão sobre identidade, rebelião contra o sistema e consequências do extremismo. A obra mistura crítica social com tensão psicológica, desafiando o espectador a questionar normas sociais."
+  },
+  {
+    titulo: "Black Mirror",
+    img: "blackm.jpg",
+    sinopse: "Série antológica que apresenta episódios independentes, cada um explorando um futuro próximo ou alternativo marcado pelo impacto da tecnologia na sociedade. Os episódios abordam alienação, vigilância, manipulação de informações e dilemas éticos relacionados a redes sociais, inteligência artificial e privacidade. A série provoca reflexão sobre as consequências das escolhas humanas diante do avanço tecnológico."
+  },
+  {
+    titulo: "The Handmaid’s Tale",
+    img: "Handmaid.jpg",
+    sinopse: "Em uma sociedade distópica chamada Gilead, mulheres são privadas de direitos e forçadas a papéis de reprodução. A narrativa acompanha June, que luta contra a opressão, buscando liberdade e justiça. A série explora autoritarismo, violência de gênero, resistência e moralidade, evidenciando riscos de regimes que negam direitos humanos e liberdade individual."
+  },
+  {
+    titulo: "Stranger Things",
+    img: "stranger.jpg",
+    sinopse: "Na pequena cidade de Hawkins, nos anos 80, o desaparecimento de um garoto desencadeia uma série de eventos envolvendo experimentos secretos, dimensões paralelas e criaturas sobrenaturais. Um grupo de amigos enfrenta desafios extraordinários enquanto preserva laços de amizade e coragem. A série combina suspense, ficção científica e nostalgia, abordando temas de lealdade, coragem e descoberta."
+  },
+  {
+    titulo: "1984",
+    img: "1984_filme.jpg",
+    sinopse: "Em um Estado totalitário controlado pelo Partido, cada cidadão é vigiado e manipulado, e até os pensamentos são monitorados. Winston Smith, o protagonista, tenta resistir ao controle absoluto e preservar sua individualidade. A obra aborda manipulação da informação, perda da liberdade e vigilância extrema, servindo como alerta sobre autoritarismo e repressão."
+  },
+  {
+    titulo: "Vidas Secas",
+    img: "vidassecas.jpg",
+    sinopse: "Retrata a vida de Fabiano, Sinhá Vitória e seus filhos, uma família nordestina sofrendo com seca, fome e pobreza. A narrativa mostra a luta diária pela sobrevivência, a dureza do ambiente e as injustiças sociais. A obra é um retrato da exclusão social e das desigualdades estruturais do Brasil rural, abordando sofrimento humano e resistência."
+  },
+  {
+    titulo: "Documentário: O Dilema das Redes",
+    img: "dilema.jpg",
+    sinopse: "O documentário analisa como grandes redes sociais moldam comportamento, percepção e emoções dos usuários, explorando técnicas de manipulação digital, coleta de dados e impactos na sociedade. Especialistas discutem efeitos psicológicos, sociais e políticos, alertando para a necessidade de consciência crítica no uso de plataformas digitais."
+  },
+  {
+    titulo: "Documentário: Antes do Dilúvio",
+    img: "diluvio.jpg",
+    sinopse: "Leonardo DiCaprio viaja pelo mundo explorando os impactos das mudanças climáticas e discutindo soluções sustentáveis. O documentário aborda poluição, aquecimento global, desmatamento e responsabilidade humana, incentivando reflexão sobre preservação ambiental e compromisso com o planeta."
+  }
+];
+
+
+const catalogo = document.getElementById("catalogo");
+
+function carregarFavoritos() {
+  catalogo.innerHTML = "";
+  let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
+  if(favoritos.length === 0){
+    catalogo.innerHTML = "<p>Nenhum favorito ainda.</p>";
+    return;
+  }
+
+  favoritos.forEach(titulo => {
+    const r = repertorios.find(f => f.titulo === titulo);
+    if(r){
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <img src="${r.img}" alt="${r.titulo}">
+        <div class="card-content">
+          <h3>${r.titulo}</h3>
+          <p>${r.sinopse}</p>
+          <button class="btn-remove"><i class="fa fa-trash"></i> Remover</button>
+        </div>
+      `;
+
+      // Remover favorito
+      const btnRemove = card.querySelector(".btn-remove");
+      btnRemove.addEventListener("click", () => {
+        favoritos = favoritos.filter(f => f !== r.titulo);
+        localStorage.setItem("favoritos", JSON.stringify(favoritos));
+        carregarFavoritos();
+      });
+
+      catalogo.appendChild(card);
+    }
+  });
+}
+
+// Carrega favoritos ao abrir a página
+carregarFavoritos();
+</script>
+
+</body>
+</html>
