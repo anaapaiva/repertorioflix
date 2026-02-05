@@ -27,25 +27,6 @@ main { padding:20px; max-width:1100px; margin:auto; }
   <input type="text" id="searchInput" placeholder="🔍 Pesquise um repertório..." 
          style="width:80%; padding:10px 15px; border-radius:8px; border:none; font-size:1rem; background:#222; color:#fff;">
 </div>
-
-<script>
-// Seleciona input e todos os repertórios
-const searchInput = document.getElementById('searchInput');
-const repertorios = document.querySelectorAll('.repertorio');
-
-searchInput.addEventListener('keyup', function() {
-  const filter = this.value.toLowerCase();
-
-  repertorios.forEach(repertorio => {
-    const text = repertorio.textContent.toLowerCase();
-    if (text.includes(filter)) {
-      repertorio.style.display = 'block';
-    } else {
-      repertorio.style.display = 'none';
-    }
-  });
-});
-</script>
 <main>
 
 <!-- Parasita -->
@@ -375,6 +356,25 @@ searchInput.addEventListener('keyup', function() {
 <!-- Aqui você pode adicionar os demais repertórios da mesma forma -->
 
 </main>
+
+<script>
+// Seleciona input e todos os repertórios
+const searchInput = document.getElementById('searchInput');
+const repertorios = document.querySelectorAll('.repertorio');
+
+searchInput.addEventListener('keyup', function() {
+  const filter = this.value.toLowerCase();
+
+  repertorios.forEach(repertorio => {
+    const text = repertorio.textContent.toLowerCase();
+    if (text.includes(filter)) {
+      repertorio.style.display = 'block';
+    } else {
+      repertorio.style.display = 'none';
+    }
+  });
+});
+</script>
 
 </body>
 </html>
